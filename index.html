@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>💖 우리 반 자기소개</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; background:#fff6f0; margin:0; padding:20px; }
+    h1 { text-align:center; }
+    .buttons { text-align:center; margin-bottom:20px; }
+    button { margin:0 5px; padding:8px 14px; border:none; border-radius:8px; cursor:pointer; background:#ff8a80; color:#fff; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:15px; }
+    .card { background:#fff; border-radius:12px; padding:15px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    .likes { color:#ff5252; font-size:0.9em; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <h1>💖 우리 반 자기소개</h1>
+  <div class="buttons">
+    <button onclick="sortByLatest()">최신순</button>
+    <button onclick="sortByLikes()">좋아요순</button>
+  </div>
+  <form id="introForm">
+    <input id="name" placeholder="이름" required />
+    <input id="hobby" placeholder="취미" required />
+    <input id="skill" placeholder="특기" required />
+    <input id="intro" placeholder="한 줄 소개" required />
+    <button type="submit">등록</button>
+  </form>
+  <div class="grid" id="list"></div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const BASE_PATH = "introductions_copy";
+let introductions = [];
+let sortMode = "latest";
+
+const form = document.getElementById("introForm");
+const list = document.getElementById("list");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const name = document.getElementById("name").value;
+  const hobby = document.getElementById("hobby").value;
+  const skill = document.getElementById("skill").value;
+  const intro = document.getElementById("intro").value;
+  const newRef = db.ref(BASE_PATH).push();
+  newRef.set({
+    name, hobby, skill, intro,
+    likes:0,
+    timestamp: Date.now()
+  });
+  form.reset();
+});
+
+function render() {
+  list.innerHTML = "";
+  let sorted = [...introductions];
+  if (sortMode==="likes") {
+    sorted.sort((a,b)=>b.likes-a.likes);
+  } else {
+    sorted.sort((a,b)=>b.timestamp-a.timestamp);
+  }
+  sorted.forEach(item=>{
+    const div = document.createElement("div");
+    div.className="card";
+    div.innerHTML = \`
+      <h3>\${item.name}</h3>
+      <p>취미: \${item.hobby}</p>
+      <p>특기: \${item.skill}</p>
+      <p>\${item.intro}</p>
+      <p class="likes">❤️ \${item.likes}</p>
+      <button onclick="likeItem('\${item.id}')">좋아요</button>
+    \`;
+    list.appendChild(div);
+  });
+}
+
+function sortByLatest(){ sortMode="latest"; render(); }
+function sortByLikes(){ sortMode="likes"; render(); }
+
+function likeItem(id){
+  const ref = db.ref(BASE_PATH+"/"+id+"/likes");
+  ref.transaction(likes=>(likes||0)+1);
+}
+
+db.ref(BASE_PATH).on("value", snapshot=>{
+  const data = snapshot.val()||{};
+  introductions = Object.keys(data).map(id=>({id,...data[id]}));
+  render();
+});
+</script>
+</body>
+</html>
