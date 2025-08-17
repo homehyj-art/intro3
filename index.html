@@ -52,24 +52,20 @@
     .card {
       background: white;
       border-radius: 20px;
+      padding: 1rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      overflow: hidden;
       transition: transform 0.2s;
     }
     .card:hover {
       transform: translateY(-5px);
     }
-    .card .card-row {
-      border-bottom: 1px solid #ffd6e8;
-      padding: 0.5rem 0.8rem;
+    .card-row {
+      margin: 0.3rem 0;
+      padding: 0.2rem 0.5rem;
+      border-bottom: 1px solid #ffe4ec;
       font-size: 1rem;
     }
-    .card .card-row:last-child {
-      border-bottom: none;
-    }
-    .card .like-btn {
-      display: block;
-      margin: 0.5rem auto 0.8rem auto;
+    .like-btn {
       background: #ffd6e8;
       border: none;
       border-radius: 15px;
@@ -77,8 +73,9 @@
       font-size: 0.9rem;
       cursor: pointer;
       transition: 0.2s;
+      margin-top: 0.5rem;
     }
-    .card .like-btn:hover {
+    .like-btn:hover {
       background: #ffb6d4;
     }
     .intro-form {
@@ -86,21 +83,14 @@
       padding: 1rem;
       text-align: center;
       border-top: 2px dashed #ffb6d4;
-      max-width: 500px;
-      margin: 1rem auto;
-      border-radius: 20px;
-    }
-    .intro-form .input-row {
-      margin: 0.4rem 0;
     }
     .intro-form input {
       font-family: 'Nanum Pen Script', cursive;
-      font-size: 1rem;
+      font-size: 1.1rem;
+      margin: 0.3rem;
       padding: 0.4rem;
       border-radius: 10px;
-      border: 1px solid #ffd6e8;
-      width: 90%;
-      box-sizing: border-box;
+      border: 1px solid #ddd;
     }
     .intro-form button {
       font-family: 'Jua', sans-serif;
@@ -133,22 +123,19 @@
     <button onclick="setSort('likes')">❤️ 좋아요순</button>
   </div>
   
-  <div class="card-container" id="introContainer">
-    <!-- 자기소개 카드들이 여기에 뜸 -->
-  </div>
+  <div class="card-container" id="introContainer"></div>
   
   <div class="intro-form">
     <h3>✏️ 자기소개 등록하기</h3>
-    <div class="input-row"><input type="text" id="nameInput" placeholder="이름"></div>
-    <div class="input-row"><input type="text" id="hobbyInput" placeholder="취미"></div>
-    <div class="input-row"><input type="text" id="skillInput" placeholder="특기"></div>
-    <div class="input-row"><input type="text" id="messageInput" placeholder="하고 싶은 말"></div>
+    <input type="text" id="nameInput" placeholder="이름">
+    <input type="text" id="hobbyInput" placeholder="취미">
+    <input type="text" id="skillInput" placeholder="특기">
+    <input type="text" id="messageInput" placeholder="하고 싶은 말">
+    <br>
     <button onclick="addIntro()">등록하기</button>
   </div>
   
-  <footer>
-    💌 우리 반 친구들의 자기소개를 남겨보아요!
-  </footer>
+  <footer>💌 우리 반 친구들의 자기소개를 남겨보아요!</footer>
   
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -190,9 +177,12 @@
           <div class="card-row"><strong>취미:</strong> ${item.hobby||"-"}</div>
           <div class="card-row"><strong>특기:</strong> ${item.skill||"-"}</div>
           <div class="card-row"><strong>하고 싶은 말:</strong> ${item.message||"-"}</div>
-          <button class="like-btn" onclick="likeIntro('${item.id}', ${item.likes||0})">❤️ ${item.likes||0}</button>
+          <button class="like-btn">❤️ ${item.likes||0}</button>
         `;
         container.appendChild(card);
+
+        const btn = card.querySelector(".like-btn");
+        btn.addEventListener("click", () => likeIntro(item.id, item.likes || 0));
       });
     }
 
