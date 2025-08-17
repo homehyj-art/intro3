@@ -54,7 +54,6 @@
       border-radius: 20px;
       padding: 1rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      text-align: center;
       transition: transform 0.2s;
     }
     .card:hover {
@@ -64,6 +63,11 @@
       font-family: 'Jua', sans-serif;
       font-size: 1.2rem;
       margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .card p {
+      margin: 0.2rem 0;
+      font-size: 1rem;
     }
     .like-btn {
       background: #ffd6e8;
@@ -73,6 +77,7 @@
       font-size: 0.9rem;
       cursor: pointer;
       transition: 0.2s;
+      margin-top: 0.5rem;
     }
     .like-btn:hover {
       background: #ffb6d4;
@@ -100,11 +105,10 @@
   </div>
   
   <footer>
-    💌 이름과 댓글을 함께 남겨주세요!  
+    💌 이름, 취미, 특기, 하고 싶은 말을 남겨주세요!
   </footer>
   
   <script type="module">
-    // Firebase 연결
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
     
@@ -141,7 +145,9 @@
         card.className = "card";
         card.innerHTML = `
           <h3>${item.name}</h3>
-          <p>${item.text}</p>
+          <p>🎨 취미: ${item.hobby||"-"}</p>
+          <p>⭐ 특기: ${item.skill||"-"}</p>
+          <p>💬 하고 싶은 말: ${item.message||"-"}</p>
           <button class="like-btn" onclick="likeIntro('${item.id}', ${item.likes||0})">❤️ ${item.likes||0}</button>
         `;
         container.appendChild(card);
@@ -154,10 +160,14 @@
 
     window.addIntro = () => {
       const name = prompt("이름을 입력하세요:");
-      const text = prompt("자기소개를 입력하세요:");
-      if (name && text) {
+      const hobby = prompt("취미를 입력하세요:");
+      const skill = prompt("특기를 입력하세요:");
+      const message = prompt("하고 싶은 말을 입력하세요:");
+      if (name) {
         push(introRef, {
-          name, text, likes: 0, timestamp: Date.now()
+          name, hobby, skill, message,
+          likes: 0,
+          timestamp: Date.now()
         });
       }
     };
