@@ -52,24 +52,24 @@
     .card {
       background: white;
       border-radius: 20px;
-      padding: 1rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
       transition: transform 0.2s;
     }
     .card:hover {
       transform: translateY(-5px);
     }
-    .card h3 {
-      font-family: 'Jua', sans-serif;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
-    .card p {
-      margin: 0.2rem 0;
+    .card .card-row {
+      border-bottom: 1px solid #ffd6e8;
+      padding: 0.5rem 0.8rem;
       font-size: 1rem;
     }
-    .like-btn {
+    .card .card-row:last-child {
+      border-bottom: none;
+    }
+    .card .like-btn {
+      display: block;
+      margin: 0.5rem auto 0.8rem auto;
       background: #ffd6e8;
       border: none;
       border-radius: 15px;
@@ -77,15 +77,49 @@
       font-size: 0.9rem;
       cursor: pointer;
       transition: 0.2s;
-      margin-top: 0.5rem;
     }
-    .like-btn:hover {
+    .card .like-btn:hover {
       background: #ffb6d4;
+    }
+    .intro-form {
+      background: #fff0f6;
+      padding: 1rem;
+      text-align: center;
+      border-top: 2px dashed #ffb6d4;
+      max-width: 500px;
+      margin: 1rem auto;
+      border-radius: 20px;
+    }
+    .intro-form .input-row {
+      margin: 0.4rem 0;
+    }
+    .intro-form input {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: 1rem;
+      padding: 0.4rem;
+      border-radius: 10px;
+      border: 1px solid #ffd6e8;
+      width: 90%;
+      box-sizing: border-box;
+    }
+    .intro-form button {
+      font-family: 'Jua', sans-serif;
+      background: #ff90b3;
+      border: none;
+      border-radius: 15px;
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      cursor: pointer;
+      color: white;
+      font-size: 1rem;
+    }
+    .intro-form button:hover {
+      background: #ff6f9c;
     }
     footer {
       text-align: center;
       padding: 1rem;
-      margin-top: 2rem;
+      margin-top: 1rem;
       background: #ffe4ec;
       font-size: 0.9rem;
     }
@@ -97,15 +131,23 @@
   <div class="controls">
     <button onclick="setSort('new')">🆕 최신순</button>
     <button onclick="setSort('likes')">❤️ 좋아요순</button>
-    <button onclick="addIntro()">➕ 자기소개 등록</button>
   </div>
   
   <div class="card-container" id="introContainer">
     <!-- 자기소개 카드들이 여기에 뜸 -->
   </div>
   
+  <div class="intro-form">
+    <h3>✏️ 자기소개 등록하기</h3>
+    <div class="input-row"><input type="text" id="nameInput" placeholder="이름"></div>
+    <div class="input-row"><input type="text" id="hobbyInput" placeholder="취미"></div>
+    <div class="input-row"><input type="text" id="skillInput" placeholder="특기"></div>
+    <div class="input-row"><input type="text" id="messageInput" placeholder="하고 싶은 말"></div>
+    <button onclick="addIntro()">등록하기</button>
+  </div>
+  
   <footer>
-    💌 이름, 취미, 특기, 하고 싶은 말을 남겨주세요!
+    💌 우리 반 친구들의 자기소개를 남겨보아요!
   </footer>
   
   <script type="module">
@@ -144,10 +186,10 @@
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
-          <h3>${item.name}</h3>
-          <p>🎨 취미: ${item.hobby||"-"}</p>
-          <p>⭐ 특기: ${item.skill||"-"}</p>
-          <p>💬 하고 싶은 말: ${item.message||"-"}</p>
+          <div class="card-row"><strong>이름:</strong> ${item.name}</div>
+          <div class="card-row"><strong>취미:</strong> ${item.hobby||"-"}</div>
+          <div class="card-row"><strong>특기:</strong> ${item.skill||"-"}</div>
+          <div class="card-row"><strong>하고 싶은 말:</strong> ${item.message||"-"}</div>
           <button class="like-btn" onclick="likeIntro('${item.id}', ${item.likes||0})">❤️ ${item.likes||0}</button>
         `;
         container.appendChild(card);
@@ -159,16 +201,23 @@
     });
 
     window.addIntro = () => {
-      const name = prompt("이름을 입력하세요:");
-      const hobby = prompt("취미를 입력하세요:");
-      const skill = prompt("특기를 입력하세요:");
-      const message = prompt("하고 싶은 말을 입력하세요:");
+      const name = document.getElementById("nameInput").value.trim();
+      const hobby = document.getElementById("hobbyInput").value.trim();
+      const skill = document.getElementById("skillInput").value.trim();
+      const message = document.getElementById("messageInput").value.trim();
+      
       if (name) {
         push(introRef, {
           name, hobby, skill, message,
           likes: 0,
           timestamp: Date.now()
         });
+        document.getElementById("nameInput").value = "";
+        document.getElementById("hobbyInput").value = "";
+        document.getElementById("skillInput").value = "";
+        document.getElementById("messageInput").value = "";
+      } else {
+        alert("이름은 반드시 입력해야 해요! 🐥");
       }
     };
 
