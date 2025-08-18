@@ -157,11 +157,13 @@
     const introRef = ref(db, BASE_PATH);
 
     let sortMode = "new";
+    let allData = {}; // 전체 데이터 보관
 
-    const render = (data) => {
+    // 화면 렌더링 함수
+    const render = () => {
       const container = document.getElementById("introContainer");
       container.innerHTML = "";
-      let items = Object.entries(data || {}).map(([id, val]) => ({id, ...val}));
+      let items = Object.entries(allData || {}).map(([id, val]) => ({id, ...val}));
       
       if (sortMode === "likes") {
         items.sort((a, b) => (b.likes||0) - (a.likes||0));
@@ -188,8 +190,10 @@
       });
     };
 
+    // Firebase 데이터 구독 (한 번만)
     onValue(introRef, (snapshot) => {
-      render(snapshot.val());
+      allData = snapshot.val() || {};
+      render();
     });
 
     // 등록 버튼 이벤트
@@ -219,12 +223,12 @@
     // 정렬 버튼 이벤트
     document.getElementById("sortNewBtn").addEventListener("click", () => {
       sortMode = "new";
-      onValue(introRef, (snapshot) => render(snapshot.val()));
+      render();
     });
 
     document.getElementById("sortLikesBtn").addEventListener("click", () => {
       sortMode = "likes";
-      onValue(introRef, (snapshot) => render(snapshot.val()));
+      render();
     });
   </script>
 </body>
