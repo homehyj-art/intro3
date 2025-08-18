@@ -2,234 +2,199 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🌸 우리 반 자기소개 🌸</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Jua&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💖 우리 반 자기소개</title>
   <style>
     body {
-      margin: 0;
       font-family: 'Nanum Pen Script', cursive;
-      background-color: #fffafc;
-      color: #333;
+      background-color: #ffe4e1;
+      padding: 20px;
     }
-    header {
+    h1 {
       text-align: center;
-      padding: 1.5rem;
-      background: #ffe4ec;
-      font-family: 'Jua', sans-serif;
-      font-size: 2rem;
-      color: #444;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 2em;
+      margin-bottom: 20px;
     }
-    .controls {
-      text-align: center;
-      margin: 1rem;
-    }
-    .controls button {
-      font-family: 'Jua', sans-serif;
-      background: #ff90b3;
-      border: none;
-      border-radius: 20px;
-      padding: 0.5rem 1rem;
-      margin: 0.3rem;
-      cursor: pointer;
-      color: white;
-      font-size: 1rem;
-      transition: 0.2s;
-    }
-    .controls button:hover {
-      background: #ff6f9c;
-      transform: scale(1.05);
-    }
-    .card-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem;
-      padding: 1rem;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 1rem;
+    .form-section, .comments-section {
+      max-width: 700px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 16px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
     }
-    .card:hover {
-      transform: translateY(-5px);
+    input, textarea, button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 1em;
     }
-    .card-row {
-      margin: 0.3rem 0;
-      padding: 0.2rem 0.5rem;
-      border-bottom: 1px solid #ffe4ec;
-      font-size: 1rem;
-    }
-    .like-btn {
-      background: #ffd6e8;
-      border: none;
-      border-radius: 15px;
-      padding: 0.3rem 0.8rem;
-      font-size: 0.9rem;
+    button {
+      background-color: #ff91a4;
+      color: white;
+      font-weight: bold;
       cursor: pointer;
       transition: 0.2s;
-      margin-top: 0.5rem;
     }
-    .like-btn:hover {
-      background: #ffb6d4;
+    button:hover {
+      background-color: #ff6184;
     }
-    .intro-form {
-      background: #fff0f6;
-      padding: 1rem;
-      text-align: center;
-      border-top: 2px dashed #ffb6d4;
+    .comment {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
     }
-    .intro-form input {
-      font-family: 'Nanum Pen Script', cursive;
-      font-size: 1.1rem;
-      margin: 0.3rem;
-      padding: 0.4rem;
-      border-radius: 10px;
-      border: 1px solid #ddd;
+    .comment:last-child {
+      border-bottom: none;
     }
-    .intro-form button {
-      font-family: 'Jua', sans-serif;
-      background: #ff90b3;
-      border: none;
-      border-radius: 15px;
-      padding: 0.5rem 1rem;
-      margin-top: 0.5rem;
-      cursor: pointer;
-      color: white;
-      font-size: 1rem;
+    .comment strong {
+      display: block;
+      margin-bottom: 5px;
     }
-    .intro-form button:hover {
-      background: #ff6f9c;
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
     }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      margin-top: 1rem;
-      background: #ffe4ec;
-      font-size: 0.9rem;
+    .sort-buttons {
+      text-align: right;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <header>🌸 우리 반 자기소개 🌸</header>
-  
-  <div class="controls">
-    <button id="sortNewBtn">🆕 최신순</button>
-    <button id="sortLikesBtn">❤️ 좋아요순</button>
+  <h1>💖 우리 반 자기소개 💖</h1>
+
+  <!-- 입력 폼 -->
+  <div class="form-section">
+    <input type="text" id="name" placeholder="이름" />
+    <input type="text" id="hobby" placeholder="취미" />
+    <input type="text" id="skill" placeholder="특기" />
+    <textarea id="message" placeholder="하고 싶은 말"></textarea>
+    <button id="submitBtn">등록하기</button>
   </div>
-  
-  <div class="card-container" id="introContainer"></div>
-  
-  <div class="intro-form">
-    <h3>✏️ 자기소개 등록하기</h3>
-    <input type="text" id="nameInput" placeholder="이름">
-    <input type="text" id="hobbyInput" placeholder="취미">
-    <input type="text" id="skillInput" placeholder="특기">
-    <input type="text" id="messageInput" placeholder="하고 싶은 말">
-    <br>
-    <button id="addBtn">등록하기</button>
+
+  <!-- 댓글 섹션 -->
+  <div class="comments-section">
+    <div class="sort-buttons">
+      <button id="sortLatest">최신순</button>
+      <button id="sortLikes">좋아요순</button>
+    </div>
+    <div id="comments"></div>
   </div>
-  
-  <footer>💌 우리 반 친구들의 자기소개를 남겨보아요!</footer>
-  
+
+  <!-- Firebase SDK -->
   <script type="module">
+    // Firebase SDK import
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
-    
+
+    // 🔑 Firebase 설정 (사용자 제공 값 반영됨)
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      databaseURL: "YOUR_DATABASE_URL",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MSG_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyAPmwoc9vwZy8ZdAvDKdPjr3PFBh93SpoU",
+      authDomain: "intro-2-906f4.firebaseapp.com",
+      databaseURL: "https://intro-2-906f4-default-rtdb.firebaseio.com",
+      projectId: "intro-2-906f4",
+      storageBucket: "intro-2-906f4.firebasestorage.app",
+      messagingSenderId: "944399053535",
+      appId: "1:944399053535:web:85208501a4ea00611b6f6a",
+      measurementId: "G-13JHBPDRK7"
     };
-    
+
+    // Firebase 초기화
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const BASE_PATH = "introductions_copy";
-    const introRef = ref(db, BASE_PATH);
 
-    let sortMode = "new";
-    let allData = {}; // 전체 데이터 보관
+    const commentsRef = ref(db, "comments");
 
-    // 화면 렌더링 함수
-    const render = () => {
-      const container = document.getElementById("introContainer");
-      container.innerHTML = "";
-      let items = Object.entries(allData || {}).map(([id, val]) => ({id, ...val}));
-      
-      if (sortMode === "likes") {
-        items.sort((a, b) => (b.likes||0) - (a.likes||0));
-      } else {
-        items.sort((a, b) => b.timestamp - a.timestamp);
-      }
-      
-      items.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <div class="card-row"><strong>이름:</strong> ${item.name}</div>
-          <div class="card-row"><strong>취미:</strong> ${item.hobby||"-"}</div>
-          <div class="card-row"><strong>특기:</strong> ${item.skill||"-"}</div>
-          <div class="card-row"><strong>하고 싶은 말:</strong> ${item.message||"-"}</div>
-          <button class="like-btn">❤️ ${item.likes||0}</button>
-        `;
-        container.appendChild(card);
+    // 댓글 등록
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      const name = document.getElementById("name").value.trim();
+      const hobby = document.getElementById("hobby").value.trim();
+      const skill = document.getElementById("skill").value.trim();
+      const message = document.getElementById("message").value.trim();
 
-        const btn = card.querySelector(".like-btn");
-        btn.addEventListener("click", () => {
-          update(ref(db, `${BASE_PATH}/${item.id}`), { likes: (item.likes||0) + 1 });
-        });
-      });
-    };
-
-    // Firebase 데이터 구독 (한 번만)
-    onValue(introRef, (snapshot) => {
-      allData = snapshot.val() || {};
-      render();
-    });
-
-    // 등록 버튼 이벤트
-    document.getElementById("addBtn").addEventListener("click", () => {
-      const name = document.getElementById("nameInput").value.trim();
-      const hobby = document.getElementById("hobbyInput").value.trim();
-      const skill = document.getElementById("skillInput").value.trim();
-      const message = document.getElementById("messageInput").value.trim();
-      
-      if (!name) {
-        alert("이름은 반드시 입력해야 해요! 🐥");
+      if (!name || !message) {
+        alert("이름과 하고 싶은 말을 입력해 주세요!");
         return;
       }
 
-      push(introRef, {
-        name, hobby, skill, message,
+      push(commentsRef, {
+        name,
+        hobby,
+        skill,
+        message,
         likes: 0,
         timestamp: Date.now()
       });
 
-      document.getElementById("nameInput").value = "";
-      document.getElementById("hobbyInput").value = "";
-      document.getElementById("skillInput").value = "";
-      document.getElementById("messageInput").value = "";
+      document.getElementById("name").value = "";
+      document.getElementById("hobby").value = "";
+      document.getElementById("skill").value = "";
+      document.getElementById("message").value = "";
     });
 
-    // 정렬 버튼 이벤트
-    document.getElementById("sortNewBtn").addEventListener("click", () => {
-      sortMode = "new";
-      render();
+    // 정렬 기준
+    let sortBy = "latest";
+
+    document.getElementById("sortLatest").addEventListener("click", () => {
+      sortBy = "latest";
+      renderComments();
     });
 
-    document.getElementById("sortLikesBtn").addEventListener("click", () => {
-      sortMode = "likes";
-      render();
+    document.getElementById("sortLikes").addEventListener("click", () => {
+      sortBy = "likes";
+      renderComments();
     });
+
+    // 댓글 불러오기
+    let commentsData = {};
+
+    onValue(commentsRef, (snapshot) => {
+      commentsData = snapshot.val() || {};
+      renderComments();
+    });
+
+    // 댓글 렌더링
+    function renderComments() {
+      const commentsDiv = document.getElementById("comments");
+      commentsDiv.innerHTML = "";
+
+      let commentsArray = Object.entries(commentsData).map(([id, data]) => ({
+        id,
+        ...data
+      }));
+
+      if (sortBy === "latest") {
+        commentsArray.sort((a, b) => b.timestamp - a.timestamp);
+      } else if (sortBy === "likes") {
+        commentsArray.sort((a, b) => b.likes - a.likes);
+      }
+
+      commentsArray.forEach((comment) => {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `
+          <strong>😀 ${comment.name}</strong>
+          <div>취미: ${comment.hobby || "-"}</div>
+          <div>특기: ${comment.skill || "-"}</div>
+          <div>하고 싶은 말: ${comment.message}</div>
+          <div class="actions">
+            <button class="likeBtn">❤️ ${comment.likes}</button>
+          </div>
+        `;
+
+        // 좋아요 버튼
+        div.querySelector(".likeBtn").addEventListener("click", () => {
+          const newLikes = (comment.likes || 0) + 1;
+          update(ref(db, "comments/" + comment.id), { likes: newLikes });
+        });
+
+        commentsDiv.appendChild(div);
+      });
+    }
   </script>
 </body>
 </html>
